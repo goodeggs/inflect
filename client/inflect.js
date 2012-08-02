@@ -203,6 +203,9 @@ if (!process.binding) process.binding = function (name) {
 
 if (!process.cwd) process.cwd = function () { return '.' };
 
+if (!process.env) process.env = {};
+if (!process.argv) process.argv = [];
+
 require.define("path", function (require, module, exports, __dirname, __filename) {
 function filter (xs, fn) {
     var res = [];
@@ -342,7 +345,7 @@ exports.extname = function(path) {
 });
 
 require.define("/node_modules/files", function (require, module, exports, __dirname, __filename) {
-module.exports = {"package.json":"{\n  \"name\": \"inflect\",\n  \"description\": \"A port of the Rails / ActiveSupport inflector to JavaScript.\",\n  \"keywords\": [\"inflect\", \"activerecord\", \"rails\", \"activesupport\", \"string\"],\n  \"version\": \"0.2.2\",\n  \"author\": \"Stefan Huber <MSNexploder@gmail.com>\",\n  \"homepage\": \"http://msnexploder.github.com/inflect/\",\n  \"main\": \"lib/inflect\",\n  \"files\": [\n    \"Cakefile\",\n    \"CHANGELOG.md\",\n    \"doc\",\n    \"lib\",\n    \"LICENSE\",\n    \"README.md\",\n    \"spec\",\n    \"src\"\n  ],\n  \"scripts\": {\n    \"test\": \"cake test\"\n  },\n  \"directories\": {\n    \"doc\":\"./doc\",\n    \"lib\":\"./lib\"\n  },\n  \"engines\": {\n    \"node\": \">=0.4\"\n  },\n  \"devDependencies\": {\n    \"coffee-script\": \"~1.2.0\",\n    \"docco\": \"~0.3.0\",\n    \"vows\": \"~0.6.2\",\n    \"browserify\": \"~1.10.4\",\n    \"fileify\": \"~0.3.1\",\n    \"uglify-js\": \"~1.2.6\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/MSNexploder/inflect.git\"\n  },\n  \"bugs\": { \"url\": \"https://github.com/MSNexploder/inflect/issues\" },\n  \"licenses\": [\n    { \"type\": \"MIT\",\n      \"url\": \"https://github.com/MSNexploder/inflect/raw/master/LICENSE\"\n    }\n  ]\n}"}
+module.exports = {"package.json":"{\n  \"name\": \"inflect\",\n  \"description\": \"A port of the Rails / ActiveSupport inflector to JavaScript.\",\n  \"keywords\": [\"inflect\", \"activerecord\", \"rails\", \"activesupport\", \"string\"],\n  \"version\": \"0.2.3\",\n  \"author\": \"Stefan Huber <MSNexploder@gmail.com>\",\n  \"homepage\": \"http://msnexploder.github.com/inflect/\",\n  \"main\": \"lib/inflect\",\n  \"files\": [\n    \"Cakefile\",\n    \"CHANGELOG.md\",\n    \"doc\",\n    \"lib\",\n    \"LICENSE\",\n    \"README.md\",\n    \"spec\",\n    \"src\"\n  ],\n  \"scripts\": {\n    \"test\": \"cake test\"\n  },\n  \"directories\": {\n    \"doc\":\"./doc\",\n    \"lib\":\"./lib\"\n  },\n  \"engines\": {\n    \"node\": \">=0.4\"\n  },\n  \"devDependencies\": {\n    \"coffee-script\": \"~1.2.0\",\n    \"docco\": \"~0.3.0\",\n    \"vows\": \"~0.6.2\",\n    \"browserify\": \"~1.10.4\",\n    \"fileify\": \"~0.3.1\",\n    \"uglify-js\": \"~1.2.6\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/MSNexploder/inflect.git\"\n  },\n  \"bugs\": { \"url\": \"https://github.com/MSNexploder/inflect/issues\" },\n  \"licenses\": [\n    { \"type\": \"MIT\",\n      \"url\": \"https://github.com/MSNexploder/inflect/raw/master/LICENSE\"\n    }\n  ]\n}\n"}
 
 });
 
@@ -414,11 +417,9 @@ require.define("/inflect/version.coffee", function (require, module, exports, __
 
   path = require('path');
 
-  if (process.title === 'browser') {
-    data = require('files')['package.json'];
-  } else {
-    data = require('fs').readFileSync(path.join(__dirname, '/../../package.json'));
-  }
+  data = JSON.stringify({
+    version: "who cares"
+  });
 
   exports.package = JSON.parse(data);
 
@@ -428,15 +429,10 @@ require.define("/inflect/version.coffee", function (require, module, exports, __
 
 });
 
-require.define("fs", function (require, module, exports, __dirname, __filename) {
-// nothing to see here... no file methods for the browser
-
-});
-
 require.define("/inflect/inflections.coffee", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var Inflections;
-  var __slice = Array.prototype.slice;
+  var Inflections,
+    __slice = Array.prototype.slice;
 
   Inflections = (function() {
 
@@ -836,8 +832,11 @@ require.define("/inflect/default_inflections.coffee", function (require, module,
 });
 
 require.define("/index.coffee", function (require, module, exports, __dirname, __filename) {
-    
+    (function() {
+
   module.exports = require("./inflect");
+
+}).call(this);
 
 });
 require("/index.coffee");
