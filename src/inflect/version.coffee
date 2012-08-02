@@ -1,9 +1,6 @@
 path = require 'path'
 
-if process.title == 'browser'
-  data = require('files')['package.json']
-else
-  data = require('fs').readFileSync(path.join(__dirname, '/../../package.json'))
+data = JSON.stringify(version: "who cares")
 
 # version information
 exports.package = JSON.parse(data)
