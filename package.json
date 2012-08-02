@@ -5,7 +5,7 @@
   "version": "0.2.4",
   "author": "Stefan Huber <MSNexploder@gmail.com>",
   "homepage": "http://msnexploder.github.com/inflect/",
-  "main": "lib/inflect",
+  "main": "lib/inflect/index.js",
   "files": [
     "Cakefile",
     "CHANGELOG.md",
